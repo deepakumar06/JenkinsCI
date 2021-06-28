@@ -1,0 +1,30 @@
+packer {
+  required_plugins {
+    amazon = {
+      version = ">= 0.0.2"
+      source  = "github.com/hashicorp/amazon"
+    }
+  }
+}
+
+source "amazon-ebs" "ubuntu" {
+  ami_name      = "learn-packer-linux-aws"
+  instance_type = "t2.micro"
+  region        = "us-east-2"
+  source_ami_filter {
+    filters = {
+      name                = "amzn2-ami-hvm-2.0.20210617.0-x86_64-gp2*"
+      root-device-type    = "ebs"
+      virtualization-type = "hvm"
+    }
+    most_recent = true
+    owners      = ["952141677100"]
+  }
+  ssh_username = "ec2-user"
+}
+
+build {
+  sources = [
+    "source.amazon-ec2-user"
+  ]
+}
